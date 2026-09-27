@@ -1,0 +1,14 @@
+[package]
+name = "aruaru-jobs-server"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+description = "フリーランス案件をまとめて検索できる集約サイト。検索自体はaruaru-search(aruaru-llm経由、無制限・APIキー不要)へ委譲し、このサーバー自身は静的フロントエンド配信+薄い検索プロキシのみを行う。各案件から「Maid Cafe Programming School」(VS Code拡張機能)へvscode://リンクで直接開発を始められる。"
+
+[dependencies]
+open-runo-poem-compat = { path = "../../RPoem/crates/open-runo-poem-compat" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"

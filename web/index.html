@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>aruaru-jobs — フリーランス案件検索</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header>
+  <h1>aruaru-jobs</h1>
+  <p class="tagline">
+    フリーランス案件をまとめて検索。見つけた案件はそのまま
+    <strong>Maid Cafe Programming School</strong>(VS Code拡張機能)へ渡して、
+    一緒にプログラミングを学びながら開発を始められます。
+  </p>
+</header>
+
+<main>
+  <form id="search-form">
+    <input type="text" id="query-input" placeholder="例: Rust バックエンド 週2日" autocomplete="off" />
+    <button type="submit">検索</button>
+  </form>
+
+  <p id="status-line" class="setup-note"></p>
+
+  <ul id="results"></ul>
+</main>
+
+<footer>
+  <p class="setup-note">
+    正直な開示: 検索自体はこのサイト独自のロジックではなく、お使いの
+    <code>aruaru-llm</code>(既定 <code>http://127.0.0.1:4600</code>)の
+    <code>/v1/search/raw</code>(source=google)へ委譲しています。
+    「Maid Cafe Programming Schoolで開発」ボタンは
+    <a href="https://github.com/aon-co-jp/maid-cafe-programming-school">Maid Cafe Programming School</a>
+    のVS Code拡張機能がインストールされている場合のみ機能します。
+  </p>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

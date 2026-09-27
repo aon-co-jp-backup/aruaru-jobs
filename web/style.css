@@ -1,0 +1,61 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0 1rem 2rem;
+  max-width: 800px;
+  margin-inline: auto;
+}
+header h1 {
+  margin-bottom: 0.25rem;
+}
+.tagline {
+  color: #666;
+}
+#search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+#query-input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#results {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#results li {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+}
+#results li h3 {
+  margin: 0 0 0.5rem;
+}
+.job-actions {
+  margin-top: 0.75rem;
+}
+.job-actions a {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  border: 1px solid #888;
+}
+.setup-note {
+  font-size: 0.85rem;
+  color: #777;
+}
