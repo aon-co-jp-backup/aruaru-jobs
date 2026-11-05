@@ -1,6 +1,6 @@
 //! aruaru-jobs: フリーランス案件をまとめて検索できる集約サイト。
 //!
-//! 検索自体はaruaru-llm(`/v1/search/raw`、source=google、aruaru-search
+//! 検索自体はaruaru-llm(`aruaru_llm.v1.Llm/SearchRaw`、source=google、aruaru-search
 //! 優先・無制限・APIキー不要)へ薄く委譲する。このサーバー自身は
 //! (1) 静的フロントエンド配信 (2) `/api/jobs/search`での検索プロキシ、
 //! の2つだけを行う。各案件カードには「Maid Cafe Programming Schoolで
@@ -66,7 +66,7 @@ async fn job_search_handler(
         "free_only": true,
     });
 
-    let url = format!("{}/v1/search/raw", aruaru_llm_base_url());
+    let url = format!("{}/aruaru_llm.v1.Llm/SearchRaw", aruaru_llm_base_url());
     match client.post(&url).json(&payload).send().await {
         Ok(resp) => match resp.json::<serde_json::Value>().await {
             Ok(results) => Json(JobSearchResponse {
