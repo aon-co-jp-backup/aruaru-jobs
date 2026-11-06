@@ -2,7 +2,7 @@
 //!
 //! 検索自体はaruaru-llm(`aruaru_llm.v1.Llm/SearchRaw`、source=google、aruaru-search
 //! 優先・無制限・APIキー不要)へ薄く委譲する。このサーバー自身は
-//! (1) 静的フロントエンド配信 (2) `/api/jobs/search`での検索プロキシ、
+//! (1) 静的フロントエンド配信 (2) `POST /aruaru_jobs.v1.Jobs/Search`(Connect の単純呼び出し)での検索プロキシ、
 //! の2つだけを行う。各案件カードには「Maid Cafe Programming Schoolで
 //! 開発」ボタンがあり、`vscode://aon-co-jp.maid-cafe-programming-school/
 //! import-job?title=...&url=...&snippet=...` へ飛んで、その案件を
@@ -35,7 +35,13 @@ struct JobSearchResponse {
 
 #[derive(Serialize)]
 struct ErrorResponse {
+    code: &'static str,
+    message: String,
+    /// 旧クライアント互換(message と同じ値)。
     error: String,
+}
+fn err(code: &'static str, message: String) -> ErrorResponse {
+    ErrorResponse { code, error: message.clone(), message }
 }
 
 fn static_asset(path: &str, content_type: &'static str) -> open_runo_poem_compat::hyper_compat::Handler {
@@ -52,9 +58,7 @@ async fn job_search_handler(
     };
 
     if body.query.trim().is_empty() {
-        return Json(ErrorResponse {
-            error: "query must not be empty".to_string(),
-        })
+        return Json(err("invalid_argument", "query must not be empty".to_string()))
         .into_response(StatusCode::BAD_REQUEST);
     }
 
@@ -74,14 +78,10 @@ async fn job_search_handler(
                 results,
             })
             .into_response(StatusCode::OK),
-            Err(e) => Json(ErrorResponse {
-                error: format!("aruaru-llm returned an unparseable response: {e}"),
-            })
+            Err(e) => Json(err("unavailable", format!("aruaru-llm returned an unparseable response: {e}")))
             .into_response(StatusCode::BAD_GATEWAY),
         },
-        Err(e) => Json(ErrorResponse {
-            error: format!("could not reach aruaru-llm at {url}: {e}"),
-        })
+        Err(e) => Json(err("unavailable", format!("could not reach aruaru-llm at {url}: {e}")))
         .into_response(StatusCode::BAD_GATEWAY),
     }
 }
@@ -104,7 +104,7 @@ async fn main() -> std::io::Result<()> {
             get(static_asset("style.css", "text/css; charset=utf-8")),
         )
         .at(
-            "/api/jobs/search",
+            "/aruaru_jobs.v1.Jobs/Search",
             post(open_runo_poem_compat::handler_fn(job_search_handler)),
         )
         .with_cors()

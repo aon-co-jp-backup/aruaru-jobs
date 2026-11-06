@@ -63,14 +63,14 @@ form.addEventListener("submit", async (e) => {
   resultsEl.innerHTML = "";
 
   try {
-    const resp = await fetch("/api/jobs/search", {
+    const resp = await fetch("/aruaru_jobs.v1.Jobs/Search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query }),
     });
     const data = await resp.json();
     if (!resp.ok) {
-      statusEl.textContent = `エラー: ${data.error || resp.status}`;
+      statusEl.textContent = `エラー: ${data.message || data.error || resp.status}`;
       return;
     }
     const items = extractItems(data.results);

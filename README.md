@@ -13,7 +13,7 @@
 - `server/`(`aruaru-jobs-server`、Rust): `open-runo-poem-compat`
   (RPoemのhyperベースサーバーをpoem風APIでラップしたファサード)を
   使った薄いHTTPサーバー。`web/`配下の静的ファイルを配信し、
-  `POST /api/jobs/search`で`aruaru-llm`の`/v1/search/raw`
+  `POST /aruaru_jobs.v1.Jobs/Search`で`aruaru-llm`の`aruaru_llm.v1.Llm/SearchRaw`
   (`source: "google"`、aruaru-search優先・無料枠は自信が無い時のみ)へ
   プロキシする。
 - `web/`: `index.html`/`style.css`/`app.js`。案件検索フォーム+
@@ -36,7 +36,7 @@ cargo run --release
 ## 正直な開示
 
 - このサイト自身は求人サイトのスクレイピング・独自クローラーを持たない
-  ——検索は常に`aruaru-llm`側のGoogle検索経由の`/v1/search/raw`に
+  ——検索は常に`aruaru-llm`側のGoogle検索経由の`aruaru_llm.v1.Llm/SearchRaw`に
   委譲する。
 - `Maid Cafe Programming School`ボタンは同名のVS Code拡張機能が
   インストールされていない環境では機能しない(`vscode://`リンクが
@@ -45,7 +45,7 @@ cargo run --release
 ## Honest disclosure (English)
 
 This site has no scraper or crawler of its own — all search is
-delegated to `aruaru-llm`'s Google-backed `/v1/search/raw` (aruaru-search
+delegated to `aruaru-llm`'s Google-backed `aruaru_llm.v1.Llm/SearchRaw` (aruaru-search
 first, free-tier Google fallback only when the AI is unsure). The
 "develop with Maid Cafe Programming School" button only works if that
 VS Code extension is installed; otherwise the `vscode://` link is simply

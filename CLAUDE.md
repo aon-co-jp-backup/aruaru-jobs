@@ -9,9 +9,9 @@
 ## このリポジトリの役割
 
 フリーランス案件をまとめて検索できる集約サイト。検索自体は
-`aruaru-llm`側の`/v1/search/raw`(Google検索経由、aruaru-search優先)へ
+`aruaru-llm`側の`aruaru_llm.v1.Llm/SearchRaw`(Google検索経由、aruaru-search優先)へ
 委譲し、このリポジトリ自身は(1)静的フロントエンド配信 (2)
-`/api/jobs/search`での検索プロキシ、の2つだけを行う。
+`/aruaru_jobs.v1.Jobs/Search`での検索プロキシ、の2つだけを行う。
 
 ## 関連プロジェクト
 
@@ -26,7 +26,7 @@
 - `server/src/main.rs`: `open-runo-poem-compat`
   (`F:\runo\repository\RPoem\crates\open-runo-poem-compat`をpath依存)
   経由の最小サーバー。ルート: `GET /`・`GET /app.js`・`GET /style.css`・
-  `POST /api/jobs/search`。CORS+gzip圧縮ミドルウェアを`.with_cors()`
+  `POST /aruaru_jobs.v1.Jobs/Search`。CORS+gzip圧縮ミドルウェアを`.with_cors()`
   `.with_compression()`で適用。
 - `web/`: 検索フォーム+結果一覧のみの最小フロントエンド。
   `Maid Cafe Programming School`側の`import-job`ハンドラが期待する
@@ -45,7 +45,7 @@
 
 ## 次にすべきこと
 
-- 実際に稼働中の`aruaru-llm`インスタンスに対する`/api/jobs/search`の
+- 実際に稼働中の`aruaru-llm`インスタンスに対する`/aruaru_jobs.v1.Jobs/Search`の
   実HTTP E2E検証。
 - VPS(`easy-web.tokyo`等)へのデプロイ(`open-english`の
   デプロイ手順——`open-web-server`の`domains.toml`へのpath_prefix
@@ -166,4 +166,9 @@
 
 ## aruaru-llm 呼び出しの Connect 化 (2026-11-05)
 
-- 求人検索は aruaru-llm の `POST /aruaru_llm.v1.Llm/SearchRaw`(旧 `/v1/search/raw`)を呼ぶ。aruaru-llm の本番切り替えと同時に反映する。
+- 求人検索は aruaru-llm の `POST /aruaru_llm.v1.Llm/SearchRaw`(旧 `aruaru_llm.v1.Llm/SearchRaw`)を呼ぶ。aruaru-llm の本番切り替えと同時に反映する。
+
+## REST 全廃: 検索を Connect へ (2026-11-06)
+
+- `POST /api/jobs/search`(REST)を廃止し、`POST /aruaru_jobs.v1.Jobs/Search`(Connect、JSON `{"query":"..."}`)へ移した。エラーは `{"code","message"}`(+旧互換の `error`)。画面(web/app.js)も同時に変更。旧経路は 404。VPS 反映済み(バックアップ `.bak-20261106`)。
+- 確認: 新経路200・空クエリ400・旧経路404。検索結果が空になるのは aruaru-search の検索エンジン休止中のため(経路の問題ではない)。
