@@ -1,3 +1,5 @@
+> Latest translations / 翻訳の最新版: [0-LATEST-TRANSLATIONS.md](0-LATEST-TRANSLATIONS.md)
+
 # aruaru-jobs
 
 フリーランス案件をまとめて検索できる集約サイト。検索自体は
